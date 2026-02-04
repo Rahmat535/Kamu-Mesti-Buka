@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine For You</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        #minion-img {
+            width: 280px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 40px;
+            min-height: 1.5em;
+        }
+
+        /* Container Tombol Sejajar */
+        .buttons-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Jarak awal antara Yes dan No */
+            height: 150px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            background-color: white;
+            color: #333;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        /* Tombol Yes di depan agar menimpa No */
+        #yesBtn {
+            z-index: 10;
+            background-color: #ffffff;
+        }
+
+        #noBtn {
+            z-index: 5;
+            background-color: #fcfcfc;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #successPage h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="valentineMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainContainer">
+        <img id="minion-img" src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExa211a2I1MXRsNmtiODJxaHN4c2Q0ZXR5b3VleWo2OGVubWdwNHUyNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/c4ijLLteGHcas/giphy.gif" alt="Minion Love">
+        
+        <h1 id="questionText">kamu sayang aku ga, klo iya kasi 5 M dlu?</h1>
+
+        <div class="buttons-wrapper">
+            <button id="yesBtn">Yes</button>
+            <button id="noBtn">No</button>
+        </div>
+    </div>
+
+    <div id="successPage" class="hidden">
+      
+        <h1>maaciii!!! ❤️</h1>
+    </div>
+
+    <script>
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const mainContainer = document.getElementById('mainContainer');
+        const successPage = document.getElementById('successPage');
+        const questionText = document.getElementById('questionText');
+        const music = document.getElementById('valentineMusic');
+
+        let yesScale = 1;
+
+        const messages = [
+            "kamu yakin abril?",
+            "alamakkk dia tekan no",
+            "harus yes",
+            "sayanggggggg :(",
+            "You're breaking my heart!",
+            "I'm gonna cry... 😭"
+        ];
+        let msgIndex = 0;
+
+        noBtn.addEventListener('click', () => {
+            // 1. Perbesar tombol Yes
+            yesScale += 0.7; 
+            yesBtn.style.transform = `scale(${yesScale})`;
+
+            // 2. Geser tombol No ke kiri (mendekat ke belakang Yes)
+            // Semakin besar Yes, No semakin masuk ke area Yes
+            let moveLeft = yesScale * 10;
+            noBtn.style.marginLeft = `-${moveLeft}px`;
+            
+            // 3. Perkecil tombol No sedikit demi sedikit
+            let noScale = Math.max(0, 1 - (yesScale * 0.1));
+            noBtn.style.opacity = noScale; 
+
+            // 4. Update teks
+            if (msgIndex < messages.length) {
+                questionText.innerText = messages[msgIndex];
+                msgIndex++;
+            }
+        });
+
+        yesBtn.addEventListener('click', () => {
+            // Putar musik saat klik Yes (kebijakan browser melarang autoplay tanpa interaksi)
+            music.play();
+            
+            mainContainer.classList.add('hidden');
+            successPage.classList.remove('hidden');
+        });
+    </script>
+
+</body>
+</html>
